@@ -113,24 +113,29 @@ export default defineComponent({
         if (fornecedorSelecionado.value[key]) {
           algumaCheckboxSelecionada.value = true;
           return;
+        }else if (fornecedorSelecionado.value[key] == null){
+          algumaCheckboxSelecionada.value = false
         }
       }
       algumaCheckboxSelecionada.value = false;
     };
 
     const deletarFornecedores = () => {
-      Object.keys(fornecedorSelecionado.value).forEach(idFornecedor => {
-        if (fornecedorSelecionado.value[idFornecedor]) {
-          apiFornecedores.deletarFornecedor(idFornecedor)
-            .then(() => {
-              // Atualize os fornecedores após a deleção
-              fetchFornecedores();
-            })
-            .catch(error => {
-              console.error(`Erro ao deletar fornecedor ${idFornecedor}:`, error);
-            });
-        }
-      });
+      if (algumaCheckboxSelecionada.value != null) {
+        Object.keys(fornecedorSelecionado.value).forEach(idFornecedor => {
+          if (fornecedorSelecionado.value[idFornecedor]) {
+            apiFornecedores.deletarFornecedor(idFornecedor)
+              .then(() => {
+                // Atualize os fornecedores após a deleção
+                algumaCheckboxSelecionada.value = false
+                fetchFornecedores();
+              })
+              .catch(error => {
+                console.error(`Erro ao deletar fornecedor ${idFornecedor}:`, error);
+              });
+          }
+        });
+      }
     };
 
     // Exibir formulario de cadastro de fornecedores ou fechar o formulario

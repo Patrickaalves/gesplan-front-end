@@ -53,12 +53,12 @@
       const fornecedores = ref(null);
       const telefones = ref({});
   
+      // Carregar a grid com os dados dos fornecedores
       const fetchFornecedores = () => {
         apiFornecedores.getCadastros()
           .then(response => {
             fornecedores.value = response.data;
             fornecedores.value.content.forEach(fornecedor => {
-
               fetchTelefonesFornecedor(fornecedor.id);
             });
           })
@@ -67,6 +67,7 @@
           });
       };
   
+      // Busca os telefones de determinado fornecedor
       const fetchTelefonesFornecedor = (id) => {
         apiFornecedoresTelefone.getTelefones(id)
           .then(response => {
@@ -77,9 +78,9 @@
           });
       };
 
+      // Alternar o favorito tanto na aplicacao quanto no banco de dados
       const alternarFavorito = (fornecedor) => {
         fornecedor.favorito = !fornecedor.favorito;
-
         apiFornecedores.updateFornecedor(fornecedor)        
         .catch(error => {
             console.error('Erro ao atualizar fornecedor:', error);

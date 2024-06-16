@@ -99,6 +99,9 @@ export default defineComponent({
     const alternarFavorito = (fornecedor) => {
       fornecedor.favorito = !fornecedor.favorito;
       apiFornecedores.updateFornecedor(fornecedor)
+        .then(response => {
+          fetchFornecedores()
+        })
         .catch(error => {
           console.error('Erro ao atualizar fornecedor:', error);
         });

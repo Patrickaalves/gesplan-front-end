@@ -130,6 +130,7 @@ export default defineComponent({
       });
     };
 
+    // Exibir formulario de cadastro de fornecedores ou fechar o formulario
     const controleMostrarFuncionarios = (prm_salvar) => {
       mostrar_formulario.value = !mostrar_formulario.value
       if(prm_salvar == true){

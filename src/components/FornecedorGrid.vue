@@ -5,7 +5,7 @@
         <button type="button" :class="{'btn btn-warning m-2': algumaCheckboxSelecionada, 'btn btn-secondary m-2': !algumaCheckboxSelecionada}">
           <i class="bi bi-pencil"></i>
         </button>
-        <button type="button" :class="{'btn btn-danger m-2': algumaCheckboxSelecionada, 'btn btn-secondary m-2': !algumaCheckboxSelecionada}">
+        <button @click="deletarFornecedores()" type="button" :class="{'btn btn-danger m-2': algumaCheckboxSelecionada, 'btn btn-secondary m-2': !algumaCheckboxSelecionada}">
           <i class="bi bi-trash"></i>
         </button>
       </nav>
@@ -43,10 +43,7 @@
             </tr>
           </tbody>
         </table>
-        
-        
       </div>
-  
       <div v-else>
         <p>Nenhum fornecedor encontrado.</p>
       </div>
@@ -109,6 +106,15 @@
         }
         algumaCheckboxSelecionada.value = false;
       };
+
+      const deletarFornecedores = () => {
+        console.log(fornecedorSelecionado.value)
+        for(let idFornecedor in fornecedorSelecionado.value){
+          apiFornecedores.deletarFornecedor(idFornecedor)
+          window.location.reload()
+          console.log(idFornecedor)
+        }
+      };
   
       // Monitorar mudanças nas checkboxes selecionadas
       watch(fornecedorSelecionado, verificarAlgumaSelecionada, { deep: true });
@@ -123,6 +129,7 @@
         fornecedorSelecionado,
         algumaCheckboxSelecionada,
         alternarFavorito,
+        deletarFornecedores
       };
     },
   });

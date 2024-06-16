@@ -11,11 +11,14 @@ api.getCadastros = function() {
 };
 
 api.updateFornecedor = function(fornecedor) {
-
   // remove o atributo id, para ele não ser mandado no body
   const { id: _, ...fornecedorNovo } = fornecedor;
 
   return this.put(`fornecedor/${fornecedor.id}`, fornecedorNovo);
 };
+
+api.deletarFornecedor = function(idFornecedor){
+  return this.delete(`fornecedor/${idFornecedor}`)
+}
 
 export default api;

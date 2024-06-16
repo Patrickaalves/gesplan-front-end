@@ -98,7 +98,7 @@ export default defineComponent({
     // Alternar o favorito tanto na aplicacao quanto no banco de dados
     const alternarFavorito = (fornecedor) => {
       fornecedor.favorito = !fornecedor.favorito;
-      apiFornecedores.updateFornecedor(fornecedor)
+      apiFornecedores.updateFornecedorFavorito(fornecedor)
         .then(response => {
           fetchFornecedores()
         })

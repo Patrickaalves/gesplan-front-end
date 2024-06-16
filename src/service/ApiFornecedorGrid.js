@@ -10,7 +10,7 @@ api.getCadastros = function() {
   return this.get('fornecedor?sort=favorito,desc');
 };
 
-api.updateFornecedor = function(fornecedor) {
+api.updateFornecedorFavorito = function(fornecedor) {
   // remove o atributo id, para ele não ser mandado no body
   const { id: _, ...fornecedorNovo } = fornecedor;
 

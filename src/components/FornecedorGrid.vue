@@ -1,15 +1,23 @@
 <template>
   <div>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <button @click="controleMostrarFuncionarios()" type="button" class="btn btn-success btn-lg m-1">Novo Fornecedor</button>
-      <button type="button" :class="{'btn btn-warning m-2': algumaCheckboxSelecionada, 'btn btn-secondary m-2': !algumaCheckboxSelecionada}">
+      <button @click="controleMostrarFuncionarios()" type="button" class="btn btn-success btn-lg m-1">Novo
+        Fornecedor</button>
+      <button @click="controleMostrarEdicaoFuncionarios()" type="button"
+        :class="{ 'btn btn-warning m-2': algumaCheckboxSelecionada, 'btn btn-secondary m-2': !algumaCheckboxSelecionada }">
         <i class="bi bi-pencil"></i>
       </button>
-      <button @click="deletarFornecedores()" type="button" :class="{'btn btn-danger m-2': algumaCheckboxSelecionada, 'btn btn-secondary m-2': !algumaCheckboxSelecionada}">
+      <button @click="deletarFornecedores()" type="button"
+        :class="{ 'btn btn-danger m-2': algumaCheckboxSelecionada, 'btn btn-secondary m-2': !algumaCheckboxSelecionada }">
         <i class="bi bi-trash"></i>
       </button>
     </nav>
     <FornecedorFormulario v-if="mostrar_formulario" @close="controleMostrarFuncionarios()" @save="controleMostrarFuncionarios(true)" />
+
+    <FornecedorEditar v-if="editar_fornecedor_formulario" :idFornecedor="idFornecedorSelecionado" @close="controleMostrarEdicaoFuncionarios()" 
+    @save="controleMostrarEdicaoFuncionarios()" @fecharEdicao="controleMostrarEdicaoFuncionarios(true)"/>
+
+
     <div v-if="fornecedores && fornecedores.content.length > 0">
       <table class="table">
         <thead>
@@ -56,11 +64,13 @@ import apiFornecedores from '@/service/ApiFornecedorGrid.js';
 import apiFornecedoresTelefone from '@/service/ApiFornecedoresTelefone';
 
 import FornecedorFormulario from '@/components/FornecedorFormulario.vue'
+import FornecedorEditar from '@/components/FornecedorEditar.vue'
 
 export default defineComponent({
 
   components: {
-    FornecedorFormulario
+    FornecedorFormulario,
+    FornecedorEditar
   },
 
   setup() {
@@ -69,6 +79,8 @@ export default defineComponent({
     const fornecedorSelecionado = ref({}); // Objeto para controlar checkboxes selecionadas
     const algumaCheckboxSelecionada = ref(false); // Variável para verificar se alguma checkbox está selecionada
     const mostrar_formulario = ref(false)
+    const editar_fornecedor_formulario = ref(false)
+    const idFornecedorSelecionado = ref(null); // ID do fornecedor selecionado para edição
 
     // Carregar a grid com os dados dos fornecedores
     const fetchFornecedores = () => {
@@ -109,15 +121,14 @@ export default defineComponent({
 
     // Verificar se alguma checkbox está selecionada
     const verificarAlgumaSelecionada = () => {
+      let algumaSelecionada = false;
       for (let key in fornecedorSelecionado.value) {
         if (fornecedorSelecionado.value[key]) {
-          algumaCheckboxSelecionada.value = true;
-          return;
-        }else if (fornecedorSelecionado.value[key] == null){
-          algumaCheckboxSelecionada.value = false
+          algumaSelecionada = true;
+          break;
         }
       }
-      algumaCheckboxSelecionada.value = false;
+      algumaCheckboxSelecionada.value = algumaSelecionada;
     };
 
     const deletarFornecedores = () => {
@@ -141,10 +152,26 @@ export default defineComponent({
     // Exibir formulario de cadastro de fornecedores ou fechar o formulario
     const controleMostrarFuncionarios = (prm_salvar) => {
       mostrar_formulario.value = !mostrar_formulario.value
-      if(prm_salvar == true){
+      if (prm_salvar == true) {
         fetchFornecedores();
       }
     }
+
+    const controleMostrarEdicaoFuncionarios = (prm_fechar) => {
+      // Verificar se há apenas um fornecedor selecionado
+      let idsSelecionados = Object.keys(fornecedorSelecionado.value).filter(key => fornecedorSelecionado.value[key]);
+      if (idsSelecionados.length === 1) {
+        // Definir o ID do fornecedor selecionado para edição
+        idFornecedorSelecionado.value = idsSelecionados[0];
+        editar_fornecedor_formulario.value = true;
+      } else {
+        editar_fornecedor_formulario.value = false;
+      }
+      if(prm_fechar){
+        editar_fornecedor_formulario.value = false;
+      }
+      
+    };
 
     // Monitorar mudanças nas checkboxes selecionadas
     watch(fornecedorSelecionado, verificarAlgumaSelecionada, { deep: true });
@@ -161,7 +188,10 @@ export default defineComponent({
       alternarFavorito,
       deletarFornecedores,
       mostrar_formulario,
-      controleMostrarFuncionarios
+      controleMostrarFuncionarios,
+      editar_fornecedor_formulario,
+      controleMostrarEdicaoFuncionarios,
+      idFornecedorSelecionado // Retornar ID do fornecedor selecionado para edição
     };
   },
 });

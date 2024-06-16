@@ -29,15 +29,15 @@
                             </div>
                         </div>
                     </form>
-                    <form v-for="(item, index) in listaCampoTelefone" :key="index">
+                    <form v-for="(telefone, index) in novoFornecedor.telefones" :key="index">
                         <div class="row mb-3">
                             <div class="col">
                                 <label :for="'inputTelefone' + index" class="form-label">Telefone</label>
-                                <input type="text" class="form-control" :id="'inputTelefone' + index" v-model="novoFornecedor.telefones[index].numeroTelefone">
+                                <input type="text" class="form-control" :id="'inputTelefone' + index" v-model="telefone.numeroTelefone">
                             </div>
                             <div class="col align-self-end">
                                 <button @click="AdicionarCampoTelefone()" type="button" class="btn btn-success espaco-entre-botoes"><i class="bi bi-plus"></i></button>
-                                <button @click="RemoverCampoTelefone(index)" v-if="contadorCampoTelefone > 0" type="button" class="btn btn-danger"><i class="bi bi-trash"></i></button>
+                                <button @click="RemoverCampoTelefone(index)" v-if="novoFornecedor.telefones.length > 1" type="button" class="btn btn-danger"><i class="bi bi-trash"></i></button>
                             </div>
                         </div>
                     </form>
@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import { defineComponent, ref,onMounted } from 'vue';
+import { defineComponent, ref, onMounted } from 'vue';
 import apiFornecedores from '@/service/ApiFornecedorGrid.js';
 
 export default defineComponent({
@@ -70,8 +70,6 @@ export default defineComponent({
             telefones: [{ numeroTelefone: '' }],
             observacao: ''
         });
-        const contadorCampoTelefone = ref(-1)
-        const listaCampoTelefone = ref([])
 
         const salvarFornecedor = () => {
             const fornecedorNovo = montarJsonFornecedor();
@@ -81,9 +79,8 @@ export default defineComponent({
                     emit('save')
                 })
                 .catch(error => {
-                    console.error('Erro ao buscar fornecedores:', error);
-            });
-
+                    console.error('Erro ao salvar fornecedor:', error);
+                });
         }
 
         const montarJsonFornecedor = () => {
@@ -94,20 +91,19 @@ export default defineComponent({
                 telefones: novoFornecedor.value.telefones.map(telefone => ({ numeroTelefone: telefone.numeroTelefone })),
                 observacao: novoFornecedor.value.observacao,
                 favorito: false
-            }; 
+            };
 
-            return fornecedorParaSalvar
+            return fornecedorParaSalvar;
         }
 
         const AdicionarCampoTelefone = () => {
-            contadorCampoTelefone.value++;
-            listaCampoTelefone.value.push('');
+            novoFornecedor.value.telefones.push({ numeroTelefone: '' });
         }
 
         const RemoverCampoTelefone = (index) => {
-
-            listaCampoTelefone.value.splice(index, 1);
-            contadorCampoTelefone.value--;
+            if (novoFornecedor.value.telefones.length > 1) {
+                novoFornecedor.value.telefones.splice(index, 1);
+            }
         }
 
         onMounted(() => {
@@ -117,8 +113,6 @@ export default defineComponent({
         return {
             salvarFornecedor,
             AdicionarCampoTelefone,
-            listaCampoTelefone,
-            contadorCampoTelefone,
             RemoverCampoTelefone,
             novoFornecedor
         }
@@ -146,7 +140,7 @@ export default defineComponent({
     position: relative;
 }
 
-.espaco-entre-botoes{
+.espaco-entre-botoes {
     margin-right: 10px;
 }
 </style>

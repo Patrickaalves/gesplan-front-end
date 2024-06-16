@@ -21,4 +21,8 @@ api.deletarFornecedor = function(idFornecedor){
   return this.delete(`fornecedor/${idFornecedor}`)
 }
 
+api.salvarFornecedor = function(fornecedor){
+  return this.post('fornecedor',fornecedor)
+}
+
 export default api;

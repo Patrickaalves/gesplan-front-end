@@ -137,7 +137,6 @@ export default defineComponent({
           if (fornecedorSelecionado.value[idFornecedor]) {
             apiFornecedores.deletarFornecedor(idFornecedor)
               .then(() => {
-                // Atualize os fornecedores após a deleção
                 algumaCheckboxSelecionada.value = false
                 fetchFornecedores();
               })
@@ -146,6 +145,11 @@ export default defineComponent({
               });
           }
         });
+
+        for (let key in fornecedorSelecionado.value) {
+          fornecedorSelecionado.value[key] = false;
+        }
+
       }
     };
 
@@ -164,14 +168,16 @@ export default defineComponent({
         // Definir o ID do fornecedor selecionado para edição
         idFornecedorSelecionado.value = idsSelecionados[0];
         editar_fornecedor_formulario.value = true;
-      } else {
-        editar_fornecedor_formulario.value = false;
       }
-      if(prm_fechar){
+      if (prm_fechar) {
         editar_fornecedor_formulario.value = false;
+
+        // Desmarcar todas as checkboxes
+        for (let key in fornecedorSelecionado.value) {
+          fornecedorSelecionado.value[key] = false;
+        }
       }
-      
-    };
+};
 
     // Monitorar mudanças nas checkboxes selecionadas
     watch(fornecedorSelecionado, verificarAlgumaSelecionada, { deep: true });

@@ -137,6 +137,7 @@ export default defineComponent({
           if (fornecedorSelecionado.value[idFornecedor]) {
             apiFornecedores.deletarFornecedor(idFornecedor)
               .then(() => {
+                // Atualize os fornecedores após a deleção
                 algumaCheckboxSelecionada.value = false
                 fetchFornecedores();
               })
@@ -149,7 +150,7 @@ export default defineComponent({
         for (let key in fornecedorSelecionado.value) {
           fornecedorSelecionado.value[key] = false;
         }
-
+        
       }
     };
 
@@ -169,6 +170,7 @@ export default defineComponent({
         idFornecedorSelecionado.value = idsSelecionados[0];
         editar_fornecedor_formulario.value = true;
       }
+      // Se prm_fechar for verdadeiro, fechar o formulário de edição
       if (prm_fechar) {
         editar_fornecedor_formulario.value = false;
 

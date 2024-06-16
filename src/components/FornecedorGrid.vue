@@ -26,7 +26,13 @@
               </td>
               <td>{{ fornecedor.tipoDeFornecedor }}</td>
               <td>{{ fornecedor.observacao }}</td>
-              <th scope="col" ><i class="bi bi-star"></i></th>
+              <td>
+                <i class="bi bi-star-fill"
+                   :class="{ 'star-selected': fornecedor.favorito }"
+                   @click="alternarFavorito(fornecedor)"
+                   >
+                </i>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -52,6 +58,7 @@
           .then(response => {
             fornecedores.value = response.data;
             fornecedores.value.content.forEach(fornecedor => {
+
               fetchTelefonesFornecedor(fornecedor.id);
             });
           })
@@ -69,6 +76,15 @@
             console.error('Erro ao buscar telefones do fornecedor:', error);
           });
       };
+
+      const alternarFavorito = (fornecedor) => {
+        fornecedor.favorito = !fornecedor.favorito;
+
+        apiFornecedores.updateFornecedor(fornecedor)        
+        .catch(error => {
+            console.error('Erro ao atualizar fornecedor:', error);
+        });
+      };
   
       onMounted(() => {
         fetchFornecedores();
@@ -77,19 +93,17 @@
       return {
         fornecedores,
         telefones,
+        alternarFavorito
       };
     },
   });
   </script>
   
-  <style>
-
-  
+<style>
  .bi-star-fill {
     cursor: pointer;
     transition: color 0.3s, background-color 0.3s;
   }
-  
   
   .star-selected {
     color: gold;

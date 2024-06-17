@@ -156,7 +156,7 @@ export default defineComponent({
       fornecedor.favorito = !fornecedor.favorito;
       apiFornecedores.atualizarCampoFavoritoFornecedor(fornecedor)
         .then(response => {
-          fetchFornecedores()
+          fetchFornecedores();
         })
         .catch(error => {
           console.error('Erro ao atualizar fornecedor:', error);

@@ -4,7 +4,6 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Formulário</h5>
-                    <h2>{{ idFornecedor }}</h2>
                     <button type="button" class="btn-close" @click="$emit('fecharEdicao')"></button>
                 </div>
                 <div class="modal-body">
@@ -86,7 +85,8 @@ export default defineComponent({
             email: '',
             tipoDeFornecedor: '',
             telefones: [{ idTelefone: null, numeroTelefone: '' }],
-            observacao: ''
+            observacao: '',
+            favorito: false
         });
 
         const montarJsonFornecedor = () => ({
@@ -147,23 +147,31 @@ export default defineComponent({
         };
 
         const AtualizarTelefonesFornecedor = () => {
-            novoFornecedor.value.telefones.forEach(telefone => {
+            return Promise.all(novoFornecedor.value.telefones.map(telefone => {
                 const { idTelefone, numeroTelefone } = telefone;
                 if (idTelefone === null || idTelefone === undefined) {
-                    apiFornecedoresTelefone.criarTelefoneFornecedor(props.idFornecedor, { numeroTelefone })
+                    return apiFornecedoresTelefone.criarTelefoneFornecedor(props.idFornecedor, { numeroTelefone })
                         .then(() => {
+                            // Telefone criado com sucesso
                         })
                         .catch(error => {
                             console.error('Erro ao criar telefone:', error);
+                            throw error; // Lança o erro para interromper o Promise.all
                         });
                 } else {
-                    apiFornecedoresTelefone.atualizarTelefonesFornecedor(props.idFornecedor, idTelefone, { numeroTelefone })
+                    return apiFornecedoresTelefone.atualizarTelefonesFornecedor(props.idFornecedor, idTelefone, { numeroTelefone })
                         .then(() => {
+                            // Telefone atualizado com sucesso
                         })
                         .catch(error => {
                             console.error(`Erro ao atualizar telefone com ID ${idTelefone}:`, error);
+                            throw error; // Lança o erro para interromper o Promise.all
                         });
                 }
+            })).then(() => {
+                // Todos os telefones foram atualizados ou criados com sucesso
+                // Emitir evento
+                emit('fecharEdicao');
             });
         };
 

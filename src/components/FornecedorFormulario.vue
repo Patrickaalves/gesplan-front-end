@@ -122,13 +122,8 @@ export default defineComponent({
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const telefoneRegex = /^\(\d{2}\)\s\d\s\d{4}-\d{4}$/;
 
-        const validarEmail = (email) => {
-            return emailRegex.test(email);
-        };
-
-        const validarTelefone = (telefone) => {
-            return telefoneRegex.test(telefone);
-        };
+        const validarEmail = (email) => emailRegex.test(email);
+        const validarTelefone = (telefone) => telefoneRegex.test(telefone);
 
         const validarFormulario = () => {
             // Validação necessaria para o bootstrap

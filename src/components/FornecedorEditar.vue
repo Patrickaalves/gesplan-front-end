@@ -89,6 +89,15 @@ export default defineComponent({
             observacao: ''
         });
 
+        const montarJsonFornecedor = () => ({
+            nome: novoFornecedor.value.nome,
+            email: novoFornecedor.value.email,
+            tipoDeFornecedor: novoFornecedor.value.tipoDeFornecedor,
+            observacao: novoFornecedor.value.observacao,
+            favorito: novoFornecedor.value.favorito
+        });
+
+        // Busca os dados do fornecedor, para serem preenchidos ao abrir o formulario de edicao
         const buscarFornecedor = (idFornecedor) => {
             apiFornecedores.buscarFornecedorPorId(idFornecedor)
                 .then(response => {
@@ -106,6 +115,21 @@ export default defineComponent({
                 });
         };
 
+        const AtualizarFornecedor = () => {
+            if (validarFormulario()) {
+                const fornecedorNovo = montarJsonFornecedor();
+                apiFornecedores.atualizarFornecedorPorId(props.idFornecedor, fornecedorNovo)
+                    .then(() => {
+                        AtualizarTelefonesFornecedor();
+                        emit('save');
+                    })
+                    .catch(error => {
+                        console.error('Erro ao salvar fornecedor:', error);
+                    });
+            }
+        };
+
+        // Busca os telefones do fornecedor, para serem preenchidos ao abrir o formulario de edicao
         const buscarTelefoneFornecedor = async (idFornecedor) => {
             try {
                 const response = await apiFornecedoresTelefone.buscarTelefoneIdFornecedor(idFornecedor);
@@ -119,26 +143,6 @@ export default defineComponent({
                 }
             } catch (error) {
                 console.error('Erro ao buscar telefones do fornecedor:', error);
-            }
-        };
-
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const telefoneRegex = /^\(\d{2}\)\s\d\s\d{4}-\d{4}$/;
-
-        const validarEmail = (email) => emailRegex.test(email);
-        const validarTelefone = (telefone) => telefoneRegex.test(telefone);
-
-        const AtualizarFornecedor = () => {
-            if (validarFormulario()) {
-                const fornecedorNovo = montarJsonFornecedor();
-                apiFornecedores.atualizarFornecedorPorId(props.idFornecedor, fornecedorNovo)
-                    .then(() => {
-                        AtualizarTelefonesFornecedor();
-                        emit('save');
-                    })
-                    .catch(error => {
-                        console.error('Erro ao salvar fornecedor:', error);
-                    });
             }
         };
 
@@ -165,15 +169,14 @@ export default defineComponent({
             });
         };
 
-        const montarJsonFornecedor = () => ({
-            nome: novoFornecedor.value.nome,
-            email: novoFornecedor.value.email,
-            tipoDeFornecedor: novoFornecedor.value.tipoDeFornecedor,
-            observacao: novoFornecedor.value.observacao,
-            favorito: novoFornecedor.value.favorito
-        });
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const telefoneRegex = /^\(\d{2}\)\s\d\s\d{4}-\d{4}$/;
+
+        const validarEmail = (email) => emailRegex.test(email);
+        const validarTelefone = (telefone) => telefoneRegex.test(telefone);
 
         const validarFormulario = () => {
+            // Validação necessaria para o bootstrap
             const forms = document.querySelectorAll('.needs-validation');
             let isValid = true;
 
@@ -186,10 +189,10 @@ export default defineComponent({
                 }
             });
 
+            // Validações feitas por min
             if (!validarEmail(novoFornecedor.value.email)) {
                 isValid = false;
             }
-
             novoFornecedor.value.telefones.forEach(telefone => {
                 if (!validarTelefone(telefone.numeroTelefone)) {
                     isValid = false;

@@ -12,11 +12,12 @@
         <i class="bi bi-trash"></i>
       </button>
     </nav>
-    <FornecedorFormulario v-if="mostrar_formulario" @close="controleMostrarFuncionarios()" @save="controleMostrarFuncionarios(true)" />
+    <FornecedorFormulario v-if="mostraFormularioCadastroNovoFornecedor" @close="controleMostrarFuncionarios()"
+      @save="controleMostrarFuncionarios(true)" />
 
-    <FornecedorEditar v-if="editar_fornecedor_formulario" :idFornecedor="idFornecedorSelecionado" @close="controleMostrarEdicaoFuncionarios()" 
-    @save="controleMostrarEdicaoFuncionarios()" @fecharEdicao="controleMostrarEdicaoFuncionarios(true)"/>
-
+    <FornecedorEditar v-if="mostraEdicaoFormularioFornecedor" :idFornecedor="idFornecedorSelecionado"
+      @close="controleMostrarEdicaoFuncionarios()" @save="controleMostrarEdicaoFuncionarios()"
+      @fecharEdicao="controleMostrarEdicaoFuncionarios(true)" />
 
     <div v-if="fornecedores && fornecedores.content.length > 0">
       <table class="table">
@@ -74,13 +75,16 @@ export default defineComponent({
   },
 
   setup() {
-    const fornecedores = ref(null);
-    const telefones = ref({});
+    const fornecedores = ref(null); // guarda os fornecedores obtidos 
+    const telefones = ref({}); // guarda os telefones dos fornecedores
+
     const fornecedorSelecionado = ref({}); // Objeto para controlar checkboxes selecionadas
     const algumaCheckboxSelecionada = ref(false); // Variável para verificar se alguma checkbox está selecionada
-    const mostrar_formulario = ref(false)
-    const editar_fornecedor_formulario = ref(false)
     const idFornecedorSelecionado = ref(null); // ID do fornecedor selecionado para edição
+    
+    const mostraFormularioCadastroNovoFornecedor = ref(false) // variavel de controle, para mostrar ou ocultar o formulario de inscricao de fornecedor
+    const mostraEdicaoFormularioFornecedor = ref(false) // variavel de controle, para mostrar ou ocultar o formulario de edicao de fornecedor
+    
 
     // Carregar a grid com os dados dos fornecedores
     const fetchFornecedores = () => {
@@ -150,13 +154,13 @@ export default defineComponent({
         for (let key in fornecedorSelecionado.value) {
           fornecedorSelecionado.value[key] = false;
         }
-        
+
       }
     };
 
     // Exibir formulario de cadastro de fornecedores ou fechar o formulario
     const controleMostrarFuncionarios = (prm_salvar) => {
-      mostrar_formulario.value = !mostrar_formulario.value
+      mostraFormularioCadastroNovoFornecedor.value = !mostraFormularioCadastroNovoFornecedor.value
       if (prm_salvar == true) {
         fetchFornecedores();
       }
@@ -168,18 +172,18 @@ export default defineComponent({
       if (idsSelecionados.length === 1) {
         // Definir o ID do fornecedor selecionado para edição
         idFornecedorSelecionado.value = idsSelecionados[0];
-        editar_fornecedor_formulario.value = true;
+        mostraEdicaoFormularioFornecedor.value = true;
       }
       // Se prm_fechar for verdadeiro, fechar o formulário de edição
       if (prm_fechar) {
-        editar_fornecedor_formulario.value = false;
+        mostraEdicaoFormularioFornecedor.value = false;
 
         // Desmarcar todas as checkboxes
         for (let key in fornecedorSelecionado.value) {
           fornecedorSelecionado.value[key] = false;
         }
       }
-};
+    };
 
     // Monitorar mudanças nas checkboxes selecionadas
     watch(fornecedorSelecionado, verificarAlgumaSelecionada, { deep: true });
@@ -195,9 +199,9 @@ export default defineComponent({
       algumaCheckboxSelecionada,
       alternarFavorito,
       deletarFornecedores,
-      mostrar_formulario,
+      mostraFormularioCadastroNovoFornecedor,
       controleMostrarFuncionarios,
-      editar_fornecedor_formulario,
+      mostraEdicaoFormularioFornecedor,
       controleMostrarEdicaoFuncionarios,
       idFornecedorSelecionado // Retornar ID do fornecedor selecionado para edição
     };

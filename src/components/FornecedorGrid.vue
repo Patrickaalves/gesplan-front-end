@@ -1,9 +1,9 @@
 <template>
   <div>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <button @click="controleMostrarFuncionarios()" type="button" class="btn btn-success btn-lg m-1">Novo
+      <button @click="controleMostrarCadastroFormularioFornecedores()" type="button" class="btn btn-success btn-lg m-1">Novo
         Fornecedor</button>
-      <button @click="controleMostrarEdicaoFuncionarios()" type="button"
+      <button @click="controleMostrarEdicaoFormularioFornecedores()" type="button"
         :class="{ 'btn btn-warning m-2': algumaCheckboxSelecionada, 'btn btn-secondary m-2': !algumaCheckboxSelecionada }">
         <i class="bi bi-pencil"></i>
       </button>
@@ -12,12 +12,17 @@
         <i class="bi bi-trash"></i>
       </button>
     </nav>
-    <FornecedorFormulario v-if="mostraFormularioCadastroNovoFornecedor" @close="controleMostrarFuncionarios()"
-      @save="controleMostrarFuncionarios(true)" />
+
+    <FornecedorFormulario v-if="mostraFormularioCadastroNovoFornecedor" 
+      @close="controleMostrarCadastroFormularioFornecedores()"
+      @save="controleMostrarCadastroFormularioFornecedores(true)" 
+    />
 
     <FornecedorEditar v-if="mostraEdicaoFormularioFornecedor" :idFornecedor="idFornecedorSelecionado"
-      @close="controleMostrarEdicaoFuncionarios()" @save="controleMostrarEdicaoFuncionarios()"
-      @fecharEdicao="controleMostrarEdicaoFuncionarios(true)" />
+      @close="controleMostrarEdicaoFormularioFornecedores()" 
+      @save="controleMostrarEdicaoFormularioFornecedores()"
+      @fecharEdicao="controleMostrarEdicaoFormularioFornecedores(true)" 
+    />
 
     <div v-if="fornecedores && fornecedores.content.length > 0">
       <table class="table">
@@ -157,15 +162,15 @@ export default defineComponent({
     };
 
     // Exibir formulario de cadastro de fornecedores ou fechar o formulario
-    const controleMostrarFuncionarios = (prm_salvar) => {
+    const controleMostrarCadastroFormularioFornecedores = (prm_fechar) => {
       mostraFormularioCadastroNovoFornecedor.value = !mostraFormularioCadastroNovoFornecedor.value
-      if (prm_salvar == true) {
+      if (prm_fechar == true) {
         fetchFornecedores();
       }
     }
 
     // Exibir formulario de edição de fornecedores ou fechar o formulario
-    const controleMostrarEdicaoFuncionarios = (prm_fechar) => {
+    const controleMostrarEdicaoFormularioFornecedores = (prm_fechar) => {
       // Verificar se há apenas um fornecedor selecionado
       let idsSelecionados = Object.keys(fornecedorSelecionado.value).filter(key => fornecedorSelecionado.value[key]);
       if (idsSelecionados.length === 1) {
@@ -176,13 +181,13 @@ export default defineComponent({
       // Se prm_fechar for verdadeiro, fechar o formulário de edição
       if (prm_fechar) {
         mostraEdicaoFormularioFornecedor.value = false;
-
         // Desmarcar todas as checkboxes
         for (let key in fornecedorSelecionado.value) {
           fornecedorSelecionado.value[key] = false;
         }
       }
     };
+
     // Monitorar mudanças nas checkboxes selecionadas
     watch(fornecedorSelecionado, verificarAlgumaSelecionada, { deep: true });
 
@@ -198,9 +203,9 @@ export default defineComponent({
       alternarFavorito,
       deletarFornecedores,
       mostraFormularioCadastroNovoFornecedor,
-      controleMostrarFuncionarios,
+      controleMostrarCadastroFormularioFornecedores,
       mostraEdicaoFormularioFornecedor,
-      controleMostrarEdicaoFuncionarios,
+      controleMostrarEdicaoFormularioFornecedores,
       idFornecedorSelecionado 
     };
   },

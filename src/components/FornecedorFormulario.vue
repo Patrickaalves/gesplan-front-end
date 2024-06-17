@@ -74,7 +74,7 @@
 
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, onMounted } from 'vue';
 import apiFornecedores from '@/service/ApiFornecedorGrid.js';
 
 export default defineComponent({

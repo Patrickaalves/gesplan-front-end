@@ -73,6 +73,8 @@ import FornecedorFormulario from '@/components/FornecedorFormulario.vue'
 import FornecedorEditar from '@/components/FornecedorEditar.vue'
 
 export default defineComponent({
+  
+  name: 'FornecedorGrid',
 
   components: {
     FornecedorFormulario,

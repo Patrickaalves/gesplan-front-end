@@ -1,5 +1,5 @@
 <script >
-import { RouterView } from 'vue-router'; // Importa apenas RouterView do vue-router
+import { RouterView } from 'vue-router'; 
 
 export default {
   components: {

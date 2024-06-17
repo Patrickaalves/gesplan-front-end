@@ -5,6 +5,11 @@ const api = axios.create({
   baseURL: 'http://localhost:8080/fornecedortelefone'
 });
 
+/*
+Ao usar a baseURL ela por padrao manda sempre com uma / e isso quebra a url fazendo não buscar direito
+Para resovler, usar a UrlBaseApis
+*/
+
 let UrlBaseApis = 'http://localhost:8080/fornecedortelefone'
 
 // Busca Todos os telefones de um determinado Fornecedor com base em seu id de fornecedor

@@ -84,7 +84,7 @@ export default defineComponent({
 
     // Carregar a grid com os dados dos fornecedores
     const fetchFornecedores = () => {
-      apiFornecedores.getCadastros()
+      apiFornecedores.listarFornecedoresGrid()
         .then(response => {
           fornecedores.value = response.data;
           fornecedores.value.content.forEach(fornecedor => {
@@ -110,7 +110,7 @@ export default defineComponent({
     // Alternar o favorito tanto na aplicacao quanto no banco de dados
     const alternarFavorito = (fornecedor) => {
       fornecedor.favorito = !fornecedor.favorito;
-      apiFornecedores.updateFornecedorFavorito(fornecedor)
+      apiFornecedores.atualizarCampoFavoritoFornecedor(fornecedor)
         .then(response => {
           fetchFornecedores()
         })
@@ -135,7 +135,7 @@ export default defineComponent({
       if (algumaCheckboxSelecionada.value != null) {
         Object.keys(fornecedorSelecionado.value).forEach(idFornecedor => {
           if (fornecedorSelecionado.value[idFornecedor]) {
-            apiFornecedores.deletarFornecedor(idFornecedor)
+            apiFornecedores.apagarFornecedoresPorId(idFornecedor)
               .then(() => {
                 // Atualize os fornecedores após a deleção
                 algumaCheckboxSelecionada.value = false

@@ -90,7 +90,7 @@ export default defineComponent({
         });
 
         const buscarFornecedor = (idFornecedor) => {
-            apiFornecedores.getFornecedorPorId(idFornecedor)
+            apiFornecedores.buscarFornecedorPorId(idFornecedor)
                 .then(response => {
                     if (response.data) {
                         const fornecedor = response.data;
@@ -131,7 +131,7 @@ export default defineComponent({
         const AtualizarFornecedor = () => {
             if (validarFormulario()) {
                 const fornecedorNovo = montarJsonFornecedor();
-                apiFornecedores.updateFornecedor(props.idFornecedor, fornecedorNovo)
+                apiFornecedores.atualizarFornecedorPorId(props.idFornecedor, fornecedorNovo)
                     .then(() => {
                         AtualizarTelefonesFornecedor();
                         emit('save');

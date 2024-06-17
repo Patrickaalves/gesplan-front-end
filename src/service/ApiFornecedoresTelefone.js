@@ -12,6 +12,10 @@ Para resovler, usar a UrlBaseApis
 
 let UrlBaseApis = 'http://localhost:8080/fornecedortelefone'
 
+api.criarTelefoneFornecedor = function (idFornecedor, telefone) {
+  return api.post(`/${idFornecedor}`, telefone);
+}
+
 // Busca Todos os telefones de um determinado Fornecedor com base em seu id de fornecedor
 api.buscarTelefoneIdFornecedor = function(idFornecedor){
   return this.get(`fornecedor/${idFornecedor}`)
@@ -21,9 +25,6 @@ api.atualizarTelefonesFornecedor = function (idFornecedor, idTelefone, telefone)
   return api.put(`${UrlBaseApis}?idFornecedor=${idFornecedor}&idTelefone=${idTelefone}`, telefone);
 }
 
-api.criarTelefoneFornecedor = function (idFornecedor, telefone) {
-  return api.post(`/${idFornecedor}`, telefone);
-}
 
 api.apagarTelefoneFornecedor = function (idTelefone) {
   return api.delete(`/${idTelefone}`, idTelefone);

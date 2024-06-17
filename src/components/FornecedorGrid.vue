@@ -110,6 +110,7 @@ export default defineComponent({
         });
     };
 
+    // apaga os fornecedores preenchidos pela checkbox
     const deletarFornecedores = () => {
       if (algumaCheckboxSelecionada.value != null) {
         Object.keys(fornecedorSelecionado.value).forEach(idFornecedor => {
@@ -125,23 +126,10 @@ export default defineComponent({
               });
           }
         });
-
         for (let key in fornecedorSelecionado.value) {
           fornecedorSelecionado.value[key] = false;
         }
       }
-    };
-
-    // Alternar o favorito tanto na aplicacao quanto no banco de dados
-    const alternarFavorito = (fornecedor) => {
-      fornecedor.favorito = !fornecedor.favorito;
-      apiFornecedores.atualizarCampoFavoritoFornecedor(fornecedor)
-        .then(response => {
-          fetchFornecedores()
-        })
-        .catch(error => {
-          console.error('Erro ao atualizar fornecedor:', error);
-        });
     };
 
     // Verificar se alguma checkbox está selecionada
@@ -154,6 +142,18 @@ export default defineComponent({
         }
       }
       algumaCheckboxSelecionada.value = algumaSelecionada;
+    };
+
+    // Alternar o favorito tanto na aplicacao quanto no banco de dados
+    const alternarFavorito = (fornecedor) => {
+      fornecedor.favorito = !fornecedor.favorito;
+      apiFornecedores.atualizarCampoFavoritoFornecedor(fornecedor)
+        .then(response => {
+          fetchFornecedores()
+        })
+        .catch(error => {
+          console.error('Erro ao atualizar fornecedor:', error);
+        });
     };
 
     // Exibir formulario de cadastro de fornecedores ou fechar o formulario
@@ -189,7 +189,7 @@ export default defineComponent({
     onMounted(() => {
       fetchFornecedores();
     });
-    
+
     return {
       fornecedores,
       telefones,

@@ -188,6 +188,10 @@ export default defineComponent({
           fornecedorSelecionado.value[key] = false;
         }
       }
+      if (mostraEdicaoFormularioFornecedor.value == false){
+        fetchFornecedores();
+      }
+
     };
 
     // Monitorar mudanças nas checkboxes selecionadas

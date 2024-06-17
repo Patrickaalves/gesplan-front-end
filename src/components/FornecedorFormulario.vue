@@ -81,6 +81,7 @@ export default defineComponent({
     name: 'FornecedorFormulario',
     setup(props, { emit }) {
 
+        // Recebe os valores do campo do formulario
         const novoFornecedor = ref({
             nome: '',
             email: '',
@@ -89,6 +90,7 @@ export default defineComponent({
             observacao: ''
         });
 
+        // monta o json para salvar o fornecedor no banco
         const montarJsonFornecedor = () => {
             return {
                 nome: novoFornecedor.value.nome,
@@ -100,6 +102,7 @@ export default defineComponent({
             };
         };
 
+        // Salvar os dados do formulario no banco
         const salvarFornecedor = () => {
             let formularioValido = validarFormulario();
 

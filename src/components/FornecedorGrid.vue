@@ -75,17 +75,16 @@ export default defineComponent({
   },
 
   setup() {
-    const fornecedores = ref(null); // guarda os fornecedores obtidos 
-    const telefones = ref({}); // guarda os telefones dos fornecedores
+    const fornecedores = ref(null); // Guarda os fornecedores obtidos 
+    const telefones = ref({}); // Guarda os telefones dos fornecedores
 
     const fornecedorSelecionado = ref({}); // Objeto para controlar checkboxes selecionadas
     const algumaCheckboxSelecionada = ref(false); // Variável para verificar se alguma checkbox está selecionada
     const idFornecedorSelecionado = ref(null); // ID do fornecedor selecionado para edição
-    
-    const mostraFormularioCadastroNovoFornecedor = ref(false) // variavel de controle, para mostrar ou ocultar o formulario de inscricao de fornecedor
-    const mostraEdicaoFormularioFornecedor = ref(false) // variavel de controle, para mostrar ou ocultar o formulario de edicao de fornecedor
-    
 
+    const mostraFormularioCadastroNovoFornecedor = ref(false) // Variavel de controle, para mostrar ou ocultar o formulario de inscricao de fornecedor
+    const mostraEdicaoFormularioFornecedor = ref(false) // Variavel de controle, para mostrar ou ocultar o formulario de edicao de fornecedor
+    
     // Carregar a grid com os dados dos fornecedores
     const fetchFornecedores = () => {
       apiFornecedores.listarFornecedoresGrid()
@@ -100,7 +99,7 @@ export default defineComponent({
         });
     };
 
-    // Busca os telefones de determinado fornecedor
+    // Carregar os telefones de determinado fornecedor
     const fetchTelefonesFornecedor = (id) => {
       apiFornecedoresTelefone.buscarTelefoneIdFornecedor(id)
         .then(response => {
@@ -109,6 +108,28 @@ export default defineComponent({
         .catch(error => {
           console.error('Erro ao buscar telefones do fornecedor:', error);
         });
+    };
+
+    const deletarFornecedores = () => {
+      if (algumaCheckboxSelecionada.value != null) {
+        Object.keys(fornecedorSelecionado.value).forEach(idFornecedor => {
+          if (fornecedorSelecionado.value[idFornecedor]) {
+            apiFornecedores.apagarFornecedoresPorId(idFornecedor)
+              .then(() => {
+                // Atualize os fornecedores após a deleção
+                algumaCheckboxSelecionada.value = false
+                fetchFornecedores();
+              })
+              .catch(error => {
+                console.error(`Erro ao deletar fornecedor ${idFornecedor}:`, error);
+              });
+          }
+        });
+
+        for (let key in fornecedorSelecionado.value) {
+          fornecedorSelecionado.value[key] = false;
+        }
+      }
     };
 
     // Alternar o favorito tanto na aplicacao quanto no banco de dados
@@ -135,29 +156,6 @@ export default defineComponent({
       algumaCheckboxSelecionada.value = algumaSelecionada;
     };
 
-    const deletarFornecedores = () => {
-      if (algumaCheckboxSelecionada.value != null) {
-        Object.keys(fornecedorSelecionado.value).forEach(idFornecedor => {
-          if (fornecedorSelecionado.value[idFornecedor]) {
-            apiFornecedores.apagarFornecedoresPorId(idFornecedor)
-              .then(() => {
-                // Atualize os fornecedores após a deleção
-                algumaCheckboxSelecionada.value = false
-                fetchFornecedores();
-              })
-              .catch(error => {
-                console.error(`Erro ao deletar fornecedor ${idFornecedor}:`, error);
-              });
-          }
-        });
-
-        for (let key in fornecedorSelecionado.value) {
-          fornecedorSelecionado.value[key] = false;
-        }
-
-      }
-    };
-
     // Exibir formulario de cadastro de fornecedores ou fechar o formulario
     const controleMostrarFuncionarios = (prm_salvar) => {
       mostraFormularioCadastroNovoFornecedor.value = !mostraFormularioCadastroNovoFornecedor.value
@@ -166,6 +164,7 @@ export default defineComponent({
       }
     }
 
+    // Exibir formulario de edição de fornecedores ou fechar o formulario
     const controleMostrarEdicaoFuncionarios = (prm_fechar) => {
       // Verificar se há apenas um fornecedor selecionado
       let idsSelecionados = Object.keys(fornecedorSelecionado.value).filter(key => fornecedorSelecionado.value[key]);
@@ -184,14 +183,13 @@ export default defineComponent({
         }
       }
     };
-
     // Monitorar mudanças nas checkboxes selecionadas
     watch(fornecedorSelecionado, verificarAlgumaSelecionada, { deep: true });
 
     onMounted(() => {
       fetchFornecedores();
     });
-
+    
     return {
       fornecedores,
       telefones,
@@ -203,7 +201,7 @@ export default defineComponent({
       controleMostrarFuncionarios,
       mostraEdicaoFormularioFornecedor,
       controleMostrarEdicaoFuncionarios,
-      idFornecedorSelecionado // Retornar ID do fornecedor selecionado para edição
+      idFornecedorSelecionado 
     };
   },
 });

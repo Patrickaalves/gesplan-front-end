@@ -108,7 +108,7 @@ export default defineComponent({
 
         const buscarTelefoneFornecedor = async (idFornecedor) => {
             try {
-                const response = await apiFornecedoresTelefone.getTelefoneIdFornecedor(idFornecedor);
+                const response = await apiFornecedoresTelefone.buscarTelefoneIdFornecedor(idFornecedor);
                 if (response.data && response.data.length > 0) {
                     novoFornecedor.value.telefones = response.data.map(tel => ({
                         idTelefone: tel.id,
@@ -146,7 +146,7 @@ export default defineComponent({
             novoFornecedor.value.telefones.forEach(telefone => {
                 const { idTelefone, numeroTelefone } = telefone;
                 if (idTelefone === null || idTelefone === undefined) {
-                    apiFornecedoresTelefone.createTelefoneFornecedor(props.idFornecedor, { numeroTelefone })
+                    apiFornecedoresTelefone.criarTelefoneFornecedor(props.idFornecedor, { numeroTelefone })
                         .then(() => {
                             console.log(`Telefone criado com sucesso.`);
                         })
@@ -154,7 +154,7 @@ export default defineComponent({
                             console.error('Erro ao criar telefone:', error);
                         });
                 } else {
-                    apiFornecedoresTelefone.updateTelefonesFornecedor(props.idFornecedor, idTelefone, { numeroTelefone })
+                    apiFornecedoresTelefone.atualizarTelefonesFornecedor(props.idFornecedor, idTelefone, { numeroTelefone })
                         .then(() => {
                             console.log(`Telefone com ID ${idTelefone} atualizado com sucesso.`);
                         })
@@ -208,7 +208,7 @@ export default defineComponent({
 
             if (telefone.idTelefone) {
                 // Telefone veio da requisição, chama endpoint para exclusão
-                apiFornecedoresTelefone.deleteTelefoneFornecedor(telefone.idTelefone)
+                apiFornecedoresTelefone.apagarTelefoneFornecedor(telefone.idTelefone)
                     .then(() => {
                         console.log(`Telefone com ID ${telefone.idTelefone} excluído com sucesso.`);
                         novoFornecedor.value.telefones.splice(index, 1);

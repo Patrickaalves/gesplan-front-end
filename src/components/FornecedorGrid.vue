@@ -98,7 +98,7 @@ export default defineComponent({
 
     // Busca os telefones de determinado fornecedor
     const fetchTelefonesFornecedor = (id) => {
-      apiFornecedoresTelefone.getTelefones(id)
+      apiFornecedoresTelefone.buscarTelefoneIdFornecedor(id)
         .then(response => {
           telefones.value[id] = response.data;
         })

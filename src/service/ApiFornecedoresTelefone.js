@@ -2,30 +2,26 @@ import axios from 'axios';
 
 // Cria a instância do axios
 const api = axios.create({
-  baseURL: 'http://localhost:8080/fornecedortelefone/fornecedor'
+  baseURL: 'http://localhost:8080/fornecedortelefone'
 });
 
+let UrlBaseApis = 'http://localhost:8080/fornecedortelefone'
 
-
-// buscaTodosOsFornecedores
-api.getTelefones = function(id) {
-  return this.get(`/${id}`);
-};
-
-api.getTelefoneIdFornecedor = function(id){
-  return this.get(`/${id}`)
+// Busca Todos os telefones de um determinado Fornecedor com base em seu id de fornecedor
+api.buscarTelefoneIdFornecedor = function(idFornecedor){
+  return this.get(`fornecedor/${idFornecedor}`)
 }
 
-api.updateTelefonesFornecedor = function (idFornecedor, idTelefone, telefone) {
-  return api.put(`http://localhost:8080/fornecedortelefone/atualizarTelefone?idFornecedor=${idFornecedor}&idTelefone=${idTelefone}`, telefone);
+api.atualizarTelefonesFornecedor = function (idFornecedor, idTelefone, telefone) {
+  return api.put(`${UrlBaseApis}?idFornecedor=${idFornecedor}&idTelefone=${idTelefone}`, telefone);
 }
 
-api.createTelefoneFornecedor = function (idFornecedor, telefone) {
-  return api.post(`http://localhost:8080/fornecedortelefone/${idFornecedor}`, telefone);
+api.criarTelefoneFornecedor = function (idFornecedor, telefone) {
+  return api.post(`/${idFornecedor}`, telefone);
 }
 
-api.deleteTelefoneFornecedor = function (idTelefone) {
-  return api.delete(`http://localhost:8080/fornecedortelefone/${idTelefone}`, idTelefone);
+api.apagarTelefoneFornecedor = function (idTelefone) {
+  return api.delete(`/${idTelefone}`, idTelefone);
 }
 
 export default api;

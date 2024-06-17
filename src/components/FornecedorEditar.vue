@@ -107,6 +107,7 @@ export default defineComponent({
                         novoFornecedor.value.email = fornecedor.email;
                         novoFornecedor.value.tipoDeFornecedor = fornecedor.tipoDeFornecedor;
                         novoFornecedor.value.observacao = fornecedor.observacao;
+                        novoFornecedor.value.favorito = fornecedor.favorito;
                         buscarTelefoneFornecedor(idFornecedor);
                     }
                 })

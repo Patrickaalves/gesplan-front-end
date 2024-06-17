@@ -89,15 +89,15 @@ export default defineComponent({
             observacao: ''
         });
 
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const telefoneRegex = /^\(\d{2}\)\s\d\s\d{4}-\d{4}$/;
-
-        const validarEmail = (email) => {
-            return emailRegex.test(email);
-        };
-
-        const validarTelefone = (telefone) => {
-            return telefoneRegex.test(telefone);
+        const montarJsonFornecedor = () => {
+            return {
+                nome: novoFornecedor.value.nome,
+                email: novoFornecedor.value.email,
+                tipoDeFornecedor: novoFornecedor.value.tipoDeFornecedor,
+                telefones: novoFornecedor.value.telefones.map(telefone => ({ numeroTelefone: telefone.numeroTelefone })),
+                observacao: novoFornecedor.value.observacao,
+                favorito: false
+            };
         };
 
         const salvarFornecedor = () => {
@@ -116,19 +116,19 @@ export default defineComponent({
             }
         };
 
-        const montarJsonFornecedor = () => {
-            return {
-                nome: novoFornecedor.value.nome,
-                email: novoFornecedor.value.email,
-                tipoDeFornecedor: novoFornecedor.value.tipoDeFornecedor,
-                telefones: novoFornecedor.value.telefones.map(telefone => ({ numeroTelefone: telefone.numeroTelefone })),
-                observacao: novoFornecedor.value.observacao,
-                favorito: false
-            };
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const telefoneRegex = /^\(\d{2}\)\s\d\s\d{4}-\d{4}$/;
+
+        const validarEmail = (email) => {
+            return emailRegex.test(email);
         };
 
+        const validarTelefone = (telefone) => {
+            return telefoneRegex.test(telefone);
+        };
 
         const validarFormulario = () => {
+            // Validação necessaria para o bootstrap
             const forms = document.querySelectorAll('.needs-validation');
             let isValid = true;
 
@@ -141,7 +141,7 @@ export default defineComponent({
                 }
             });
 
-            
+            // Validações feitas por min
             if (!validarEmail(novoFornecedor.value.email)) {
                 isValid = false;
             }
@@ -154,8 +154,7 @@ export default defineComponent({
 
             return isValid;
         };
-
-
+        
         const AdicionarCampoTelefone = () => {
             novoFornecedor.value.telefones.push({ numeroTelefone: '' });
         };

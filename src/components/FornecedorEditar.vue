@@ -152,7 +152,6 @@ export default defineComponent({
                 if (idTelefone === null || idTelefone === undefined) {
                     apiFornecedoresTelefone.criarTelefoneFornecedor(props.idFornecedor, { numeroTelefone })
                         .then(() => {
-                            console.log(`Telefone criado com sucesso.`);
                         })
                         .catch(error => {
                             console.error('Erro ao criar telefone:', error);
@@ -160,7 +159,6 @@ export default defineComponent({
                 } else {
                     apiFornecedoresTelefone.atualizarTelefonesFornecedor(props.idFornecedor, idTelefone, { numeroTelefone })
                         .then(() => {
-                            console.log(`Telefone com ID ${idTelefone} atualizado com sucesso.`);
                         })
                         .catch(error => {
                             console.error(`Erro ao atualizar telefone com ID ${idTelefone}:`, error);
@@ -213,7 +211,6 @@ export default defineComponent({
                 // Telefone veio da requisição, chama endpoint para exclusão
                 apiFornecedoresTelefone.apagarTelefoneFornecedor(telefone.idTelefone)
                     .then(() => {
-                        console.log(`Telefone com ID ${telefone.idTelefone} excluído com sucesso.`);
                         novoFornecedor.value.telefones.splice(index, 1);
                     })
                     .catch(error => {
